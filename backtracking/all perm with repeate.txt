@@ -1,0 +1,32 @@
+vector<vector<int> > res;
+vector<int> sol;
+int visit[100005];
+
+bool gen_perm(vector<int> &A){
+    if(sol.size()==A.size()){
+        res.push_back(sol);
+        return true;
+    }
+    for(int i=0;i<A.size();i++){
+        if(visit[i]==0){
+            sol.push_back(A[i]);
+            visit[i]=1;
+            gen_perm(A);
+            sol.pop_back();
+            visit[i]=0;
+            while(A[i]==A[i+1])
+                i++;
+        }
+    }
+    return true;
+}
+
+
+vector<vector<int> > Solution::permute(vector<int> &A) {
+    res.resize(0);
+    sol.clear();
+    memset(visit,0,sizeof(visit));
+    sort(A.begin(),A.end());
+    gen_perm(A);
+    return res;
+}

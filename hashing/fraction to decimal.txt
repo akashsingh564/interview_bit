@@ -1,0 +1,32 @@
+string Solution::fractionToDecimal(int numerator, int denominator) {
+    if(numerator==0)
+        return "0";
+    string str="";
+    if(numerator<0 || denominator<0)
+        str="-";
+    if(numerator<0 && denominator<0)
+        str="";
+    long long n=(long long)(numerator),d=(long long)(denominator);
+    if(numerator==INT_MIN)
+        n=(long long)(-1*numerator);
+    if(denominator==INT_MIN)
+        d=(long long)(-1*denominator);
+    n=abs(n);
+    d=abs(d);
+    str+=to_string(n/d);
+    if(n%d==0)
+        return str;
+    str+='.';
+    unordered_map <int, int> map;
+    for(int64_t r=n%d;r;r%=d){
+        if (map.find(r)!=map.end()) {
+            str.insert(map[r],1,'(');
+            str+=')';
+            break;
+        }
+        map[r]=str.size();
+        r*=10;
+        str.push_back((char)('0'+(r / d)));
+    }
+    return str;
+}

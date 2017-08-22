@@ -1,0 +1,46 @@
+string Solution::multiple(int A) {
+    if(A==0)
+        return 0;
+    int visit[A], parent[A], value[A];
+    string res="";
+    memset(visit,0,sizeof(visit));
+    memset(parent,0,sizeof(parent));
+    memset(value,0,sizeof(value));
+    queue <int> q;
+    int key=1%A;
+    visit[key]=1;
+    value[key]=1;
+    q.push(key);
+    while(true){
+        key=q.front();
+        q.pop();
+        int p=key;
+        if(key==0){
+            res+=(char)(value[key]+'0');
+            key=parent[key];
+            while(key){
+                res+=(char)(value[key]+'0');
+                key=parent[key];
+            }
+            reverse(res.begin(),res.end());
+            return res;
+        }
+        key=(key*10)%A;
+        if(!visit[key]){
+            q.push(key);
+            visit[key]=1;
+            parent[key]=p;
+            value[key]=0;
+        }
+        key=(key+1)%A;
+        if(!visit[key]){
+            q.push(key);
+            visit[key]=1;
+            parent[key]=p;
+            value[key]=1;
+        }
+    }
+}
+
+
+//http://qa.geeksforgeeks.org/4132/return-smallest-multiple-of-n

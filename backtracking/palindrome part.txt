@@ -1,0 +1,37 @@
+vector<vector<string> > res;
+vector<string> sol;
+
+bool is_pailndrome(string s){
+    int l=0,r=s.size()-1;
+    while(l<=r){
+        if(s[l]!=s[r])
+            return false;
+        l++;
+        r--;
+    }
+    return true;
+}
+
+bool pal_part(string S, int start, int l){
+    if(l==0){
+        res.push_back(sol);
+        return true;
+    }
+    for(int i=1;i<=l;i++){
+        if(is_pailndrome(S.substr(0,i))){
+            //cout<<S.substr(0,i)<<" "<<S.substr(i,l-i)<<" "<<i<<" "<<l-i<<endl;
+            sol.push_back(S.substr(0,i));
+            pal_part(S.substr(i,l-i),0,l-i);
+            sol.pop_back();
+        }
+    }
+    return true;
+}
+
+vector<vector<string> > Solution::partition(string A) {
+    res.resize(0);
+    sol.clear();
+    int l=A.size();
+    pal_part(A,0,l);
+    return res;
+}

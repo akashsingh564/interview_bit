@@ -1,0 +1,39 @@
+vector<int> Solution::dNums(vector<int> &A, int B) {
+    vector<int>res;
+    set<int>s;
+    map<int,int>m;
+    for(int i=0;i<B;i++){
+        s.insert(A[i]);
+        m[A[i]]=i;
+    }
+    res.push_back(s.size());
+    //start+1 marks the start of next interval, end marks the end of next interval.
+    //we remove element from set it is not discovered again till the scanned window, that is, between end and start+1
+    int start=0, end=B;
+    while(end<A.size()){
+        m[A[end]]=end;
+        if(m[A[start]]==start)
+            s.erase(A[start]);
+        s.insert(A[end]);
+        res.push_back(s.size());
+        start++;
+        end++;
+    }
+    return res;
+    
+
+    /******using hash map******/
+    int n=A.size();
+    vector<int> ret;
+    unordered_map <int, int> m;
+    for(int i=0; i<n; i++){
+        m[A[i]]++;
+        if(i-B+1>=0){
+            ret.push_back(m.size());
+            m[A[i-B+1]]--;
+            if(m[A[i-B+1]]==0)m.erase(A[i-B+1]);
+        }
+    }
+    return ret;
+
+}

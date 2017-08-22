@@ -1,0 +1,52 @@
+vector<vector<string> > res;
+int N;
+
+void print_sol(vector<vector<char> > visit){
+    string str="";
+    vector <string> temp;
+    for(int i=0;i<N;i++){
+        str="";
+        for(int j=0;j<N;j++)
+            str+=visit[i][j];
+        temp.push_back(str);
+    }
+    res.push_back(temp);
+    return;
+}
+
+bool is_safe(vector<vector<char> > visit, int row, int col){
+    for(int i=0;i<row;i++)
+        if(visit[i][col]=='Q')
+            return false;
+    for(int i=row, j=col;i>=0 && j>=0;i--,j--)
+        if(visit[i][j]=='Q')
+            return false;
+    for(int i=row, j=col;i>=0 && j<N;i--,j++)
+        if(visit[i][j]=='Q')
+            return false;
+    return true;
+}
+
+bool solve_NQ_util(vector<vector<char> > visit, int row){
+    if(row==N){
+        print_sol(visit);
+        return true;
+    }
+    for(int i=0;i<N;i++){
+        if(is_safe(visit,row,i)){
+            visit[row][i]='Q';
+            solve_NQ_util(visit,row+1);
+            visit[row][i]='.';
+        }
+    }
+    return false;
+}
+
+vector<vector<string> > Solution::solveNQueens(int A) {
+    N=A;
+    for(int i=0;i<res.size();i++)
+        res[i].clear();
+    vector<vector<char> > visit (A, vector <char> (A,'.'));
+    solve_NQ_util(visit,0);
+    return res;
+}

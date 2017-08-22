@@ -1,0 +1,37 @@
+ListNode* Solution::reverseBetween(ListNode* A, int m, int n) {
+    if(m==n)
+        return A;
+    ListNode* cur=A;
+    ListNode* pre=NULL;
+    ListNode* nex= NULL;
+    if(m==1){
+        ListNode* temp=A;
+        for(int i=0;i<n;i++){
+            nex=cur->next;
+            cur->next=pre;
+            pre=cur;
+            cur=nex;
+        }
+        temp->next=nex;
+        A=pre;
+        return A;
+    }
+    for(int i=1;i<m;i++){
+        pre=cur;
+        cur=cur->next;
+    }
+    ListNode* node_m_pre=pre;
+    ListNode* node_m=cur;
+    pre=pre->next;
+    cur=cur->next;
+    for(int i=0;i<n-m;i++){
+        nex=cur->next;
+        cur->next=pre;
+        pre=cur;
+        cur=nex;
+    }
+    
+    node_m->next=nex;
+    node_m_pre->next=pre;
+    return A;
+}

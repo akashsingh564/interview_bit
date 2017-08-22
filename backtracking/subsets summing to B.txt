@@ -1,0 +1,63 @@
+/****** repeates NOT allowed ******/
+
+vector<vector<int> >res;
+vector<int> sol;
+
+bool gen_combo(vector<int> &A, int idx, int sum){
+    if(sum==0){
+        res.push_back(sol);
+        return true;
+    }
+    for(int i=idx;i<A.size();i++){
+        if(sum-A[i]>=0 ){
+            //cout<<idx<<" "<<sum<<" "<<A[i]<<endl;
+            sol.push_back(A[i]);
+            if(gen_combo(A,i+1,sum-A[i]))
+                while(A[i]==A[i+1])
+                    i++;
+            sol.pop_back();
+        }
+    }
+    return true;
+}
+
+vector<vector<int> > Solution::combinationSum(vector<int> &A, int B) {
+    sol.clear();
+    sol.resize(0);
+    res.resize(0);
+    sort(A.begin(),A.end());
+    gen_combo(A,0,B);
+    return res;
+}
+
+
+
+/****** repeates allowed ******/
+vector<vector<int> >res;
+vector<int> sol;
+
+bool gen_combo(vector<int> &A, int idx, int sum){
+    if(sum==0){
+        res.push_back(sol);
+        return true;
+    }
+    for(int i=idx;i<A.size();i++){
+        if(sum-A[i]>=0 ){
+            sol.push_back(A[i]);
+            gen_combo(A,i,sum-A[i]);
+            sol.pop_back();
+        }
+    }
+}
+
+vector<vector<int> > Solution::combinationSum(vector<int> &A, int B) {
+    sol.clear();
+    sol.resize(0);
+    res.resize(0);
+    set<int> s;
+    unsigned size=A.size();
+    for(unsigned i=0; i<size; ++i ) s.insert(A[i]);
+    A.assign(s.begin(), s.end());
+    gen_combo(A,0,B);
+    return res;
+}

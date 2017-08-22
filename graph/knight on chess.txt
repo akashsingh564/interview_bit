@@ -1,0 +1,41 @@
+#define mp make_pair
+#define ff first
+#define ss second
+typedef pair<int,int> p;
+int x[]={2,2,-2,-2,1,-1,1,-1};
+int y[]={1,-1,1,-1,2,2,-2,-2};
+int visit[1005][1005];
+
+bool is_safe(int x, int y, int r, int c){
+    return (x>=1 && x<=r && y>=1 && y<=c);
+}
+
+int Solution::knight(int N, int M, int x1, int y1, int x2, int y2) {
+    int dis=0;
+    memset(visit,0,sizeof(visit));
+    
+    queue <pair<int,p> > q;
+    q.push(mp(dis,mp(x1,y1)));
+    
+    while(!q.empty()){
+        p cord=q.front().ss;
+        dis=q.front().ff;
+        q.pop();
+        
+        if(visit[cord.ff][cord.ss])
+            continue;
+            
+        visit[cord.ff][cord.ss]=1;
+        if(cord.ff==x2 && cord.ss==y2)
+            return dis;
+            
+        for(int i=0;i<8;i++){
+            int rx=cord.ff+x[i];
+            int ry=cord.ss+y[i];
+            if(is_safe(rx,ry,N,M) && !visit[rx][ry]){
+                q.push(mp(dis+1,mp(rx,ry)));
+            }
+        }
+    }
+    return -1;
+}

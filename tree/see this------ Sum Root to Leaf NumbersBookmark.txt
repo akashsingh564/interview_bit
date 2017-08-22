@@ -1,0 +1,27 @@
+//problem with pass by value & pass by refernce, uncomment the 2 expression and put & in function def
+
+
+#define MOD 1003
+int sum;
+
+void sum_all_path(TreeNode* A, long long cur_sum){
+    if(A==NULL)
+        return;
+    cur_sum=((cur_sum*10)+A->val)%MOD;
+    if(!A->left && !A->right){
+        cout<<cur_sum<<endl;
+        sum=(sum+cur_sum)%MOD;
+        //cur_sum/=10;
+        return;
+    }
+    sum_all_path(A->left,cur_sum);
+    sum_all_path(A->right,cur_sum);
+    //cur_sum/=10;
+}
+
+int Solution::sumNumbers(TreeNode* A) {
+    sum=0;
+    long long cur_sum=0;
+    sum_all_path(A,cur_sum);
+    return sum;
+}

@@ -1,0 +1,26 @@
+vector<int> Solution::stepnum(int A, int B) {
+    vector<int> res;
+    vector <bool> visit(2e7,false);
+    queue <int> q;
+    int digit;
+    long long num1, num2;
+    for(int i=0;i<10;i++)
+        q.push(i);
+    while(!q.empty()){
+        int t=q.front();
+        q.pop();
+        if(t>=A && t<=B)
+            res.push_back(t);
+        if(t==0)
+            continue;
+        digit=t%10;
+        num1=(t*10)+(digit+1);
+        num2=(t*10)+(digit-1);
+        if(num1%100!=0 && num1%100!=99 && num1<=B)
+            q.push(num1);
+        if(num2%100!=0 && num2%100!=99 && num2<=B)
+            q.push(num2);
+    }
+    sort(res.begin(),res.end());
+    return res;
+}

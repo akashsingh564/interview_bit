@@ -1,0 +1,24 @@
+vector <string> res;
+
+bool gen_paren(int idx, int n, int open, int close){
+    static char str[100005];
+    if(close==n){
+        string temp=str;
+        res.insert(res.begin(),temp);
+        return true;
+    }
+    if(open>close){
+        str[idx]=')';
+        gen_paren(idx+1,n,open,close+1);
+    }
+    if(open<n){
+        str[idx]='(';
+        gen_paren(idx+1,n,open+1,close);
+    }
+    return true;
+}
+vector<string> Solution::generateParenthesis(int A) {
+    res.resize(0);
+    gen_paren(0,A,0,0);
+    return res;
+}

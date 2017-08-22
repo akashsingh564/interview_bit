@@ -1,0 +1,27 @@
+TreeNode* build_tree(ListNode** A, int n){
+    if(n<=0)
+        return NULL;
+    
+    TreeNode* l=build_tree(A,n/2);
+    TreeNode* node=new TreeNode((*A)->val);
+    node->left=l;
+    *A=(*A)->next;
+    node->right=build_tree(A,n-n/2-1);
+    return node;
+ }
+ 
+ 
+ 
+ inline int count_nodes(ListNode* A){
+    int c=0;
+    while(A){
+        A=A->next;
+        c++;
+    }
+    return c;
+ }
+ 
+TreeNode* Solution::sortedListToBST(ListNode* A) {
+    int n=count_nodes(A);
+    return build_tree(&A,n);
+}

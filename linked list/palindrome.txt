@@ -1,0 +1,39 @@
+int compare(ListNode* A, ListNode* B){
+    while(A && B){
+        if(A->val!=B->val)
+            return 0;
+        A=A->next;
+        B=B->next;
+    }
+    return 1;
+}
+
+ListNode* reverse(ListNode* head){
+    ListNode* cur=head, *pre=NULL, *nex=NULL;
+    while(cur){
+        nex=cur->next;
+        cur->next=pre;
+        pre=cur;
+        cur=nex;
+    }
+    head=pre;
+    return head;
+}
+
+int Solution::lPalin(ListNode* A) {
+    if(A==NULL || A->next==NULL)
+        return 1;
+    ListNode *slow=A, *fast=A, *prev=NULL, *first, *second;
+    while(fast && fast->next){
+        prev=slow;
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    if(fast!=NULL)
+        slow=slow->next;
+    first=A;
+    second=slow;
+    prev->next=NULL;
+    second=reverse(second);
+    return compare(first,second);
+}

@@ -1,0 +1,29 @@
+ListNode* Solution::partition(ListNode* A, int B) {
+    if(B==1)
+        return A;
+    ListNode *curr=A, *head1=NULL, *head2=NULL;
+    ListNode* curr1= new ListNode(0);
+    ListNode* curr2= new ListNode(0);
+    head1=curr1;
+    head2=curr2;
+    while(curr){
+        if(curr->val>=B){
+            curr1->next=curr;
+            curr1=curr1->next;
+        }
+        else{
+            curr2->next=curr;
+            curr2=curr2->next;
+        }
+        curr=curr->next;
+    }
+    head1=head1->next;
+    head2=head2->next;
+    curr1->next=NULL;
+    if(head2){
+        curr2->next=head1;
+        return head2;
+    }
+    else
+        return head1;
+}

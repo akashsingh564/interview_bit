@@ -1,0 +1,21 @@
+struct CompareNode {
+    bool operator()(ListNode* const & p1, ListNode* const & p2) {
+        return p1->val > p2->val;
+    }
+};
+ListNode* Solution::mergeKLists(vector<ListNode*> &A) {
+    ListNode *dummy=new ListNode(0);
+    ListNode *cur=dummy;
+    priority_queue<ListNode*, vector<ListNode*>, CompareNode> pq;
+    for(int i=0;i<A.size();i++)
+        if(A[i])
+            pq.push(A[i]);
+    while(!pq.empty()){
+        cur->next=pq.top();
+        pq.pop();
+        cur=cur->next;
+        if(cur->next)
+            pq.push(cur->next);
+    }
+    return dummy->next;
+}

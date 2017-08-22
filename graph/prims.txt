@@ -1,0 +1,32 @@
+typedef pair<int,int> p;
+int visit[100005];
+
+int prims( vector <pair<int,int> > adj[]){
+    int cost=0;
+    priority_queue <p, vector<p>, greater<p> >q;
+    q.push(make_pair(0,1));
+    while(!q.empty()){
+        p t=q.top();
+        q.pop();
+        if(visit[t.second])
+            continue;
+        visit[t.second]=1;
+        cost+=t.first;
+        for(int i=0;i<adj[t.second].size();i++){
+            if(!visit[adj[t.second][i].second]){
+                q.push(adj[t.second][i]);
+            }
+        }
+    }
+    return cost;
+}
+
+int Solution::solve(int A, vector<vector<int> > &B) {
+    vector <p> adj[A+1];
+    memset(visit,0,sizeof(visit));
+    for(int i=0;i<B.size();i++){
+        adj[B[i][0]].push_back(make_pair(B[i][2],B[i][1]));
+        adj[B[i][1]].push_back(make_pair(B[i][2],B[i][0]));
+    }
+    return prims(adj);
+}

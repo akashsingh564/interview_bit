@@ -1,0 +1,20 @@
+ListNode* Solution::rotateRight(ListNode* A, int B) {
+    if(A==NULL || A->next==NULL)
+        return A;
+    ListNode *p1=A, *p2=A, *prev;
+    for(int i=1;i<=B;i++){
+        if(p1->next==NULL){
+            p1=A;
+            continue;
+        }
+        p1=p1->next;
+    }
+    while(p1->next!=NULL){
+        p1=p1->next;
+        p2=p2->next;
+    }
+    p1->next=A;
+    A=p2->next;
+    p2->next=NULL;
+    return A;
+}

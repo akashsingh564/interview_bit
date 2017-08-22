@@ -1,0 +1,56 @@
+#define N 9
+
+bool unassigned_cell(vector<vector<char> > &A, int *row, int *col){
+    for(*row=0;*row<N;*row=*row+1){
+        for(*col=0;*col<N;*col=*col+1){
+            if(A[*row][*col]=='.')
+                return true;
+        }
+    }
+    return false;
+}
+
+bool is_row_safe(vector<vector<char> > &A, int num, int row, int col){
+    for(int i=0;i<N;i++)
+        if(A[row][i]==((char)(num+'0')))
+            return false;
+    return true;
+}
+
+bool is_col_safe(vector<vector<char> > &A, int num, int row, int col){
+    for(int i=0;i<N;i++)
+        if(A[i][col]==((char)(num+'0')))
+            return false;
+    return true;
+}
+
+bool is_box_safe(vector<vector<char> > &A, int num, int row, int col){
+    for(int i=0;i<3;i++)
+        for(int j=0;j<3;j++)
+            if(A[((row/3)*3)+i][((col/3)*3)+j]==((char)(num+'0')))
+                return false;
+    return true;
+}
+
+bool is_safe(vector<vector<char> > &A, int num, int row, int col){
+    return (is_row_safe(A,num,row,col) && is_col_safe(A,num,row,col) && is_box_safe(A,num,row,col));
+}
+
+bool solve_sodoku(vector<vector<char> > &A){
+    int row, col;
+    if(!unassigned_cell(A,&row,&col))
+        return true;
+    for(int num=1;num<=9;num++){
+        if(is_safe(A,num,row,col)){
+            A[row][col]=((char)(num+'0'));
+            if(solve_sodoku(A))
+                return true;
+            A[row][col]='.';
+        }
+    }
+    return false;
+}
+
+void Solution::solveSudoku(vector<vector<char> > &A) {
+    solve_sodoku(A);
+}

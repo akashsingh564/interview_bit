@@ -1,0 +1,18 @@
+int is_balanced(TreeNode* A, int *h){
+    int l=0,r=0,lh=0,rh=0;
+    if(A==NULL){
+        *h=0;
+        return 1;
+    }
+    l=is_balanced(A->left,&lh);
+    r=is_balanced(A->right,&rh);
+    *h=max(lh,rh)+1;
+    if(abs(lh-rh)>1)
+        return 0;
+    return l&&r;
+}
+
+int Solution::isBalanced(TreeNode* A) {
+    int h=0;
+    return is_balanced(A,&h);
+}

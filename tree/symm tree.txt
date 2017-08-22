@@ -1,0 +1,11 @@
+int is_sym(TreeNode* A, TreeNode* B){
+    if(A==NULL && B==NULL)
+        return 1;
+    if(A && B && A->val==B->val)
+        return (is_sym(A->left,B->right) &&is_sym(A->right,B->left));
+    return 0;
+}
+
+int Solution::isSymmetric(TreeNode* A) {
+    return is_sym(A,A);
+}

@@ -1,0 +1,61 @@
+ListNode *merge(ListNode *a, ListNode* b){
+    if(!a)
+        return b;
+    if(!b)
+        return a;
+    ListNode *result;
+    if(a->val <= b->val){
+        result=a;
+        result->next=merge(a->next,b);
+    }
+    else{
+        result=b;
+        result->next=merge(a,b->next);
+    }
+    return result;
+}
+
+void split(ListNode* head, ListNode **left, ListNode **right){
+    ListNode *slow, *fast;
+    if(!head || !head->next){
+        *left=head;
+        *right=NULL;
+    }
+    else{
+        slow=head;
+        fast=head->next;
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        *left=head;
+        *right=slow->next;
+        slow->next=NULL;
+    }
+}
+
+void mergesort(ListNode **A){
+    ListNode *a, *b, *head=*A;
+    if(!head || !head->next)
+        return;
+    split(head,&a,&b);
+    mergesort(&a);
+    mergesort(&b);
+    *A=merge(a,b);
+}
+
+ListNode* Solution::sortList(ListNode* A) {
+    mergesort(&A);
+    return A;
+    /*ListNode *slow=A, *fast=A->next;
+    if(!A || !A->next)
+        return A;
+
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        fast=slow->next;
+        slow->next=NULL;
+    return merge(sortList(A),sortList(fast));*/
+}

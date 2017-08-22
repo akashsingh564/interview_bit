@@ -1,0 +1,82 @@
+TreeLinkNode* get_next_right(TreeLinkNode* A){
+    TreeLinkNode* temp=A->next;
+    while(temp){
+        if(temp->left)
+            return temp->left;
+        if(temp->right)
+            return temp->right;
+        temp=temp->next;
+    }
+    return NULL;
+}
+
+void Solution::connect(TreeLinkNode* A) {
+    if(!A)
+        return;
+    A->next=NULL;
+    while(A!=NULL){
+        TreeLinkNode* q=A;
+        while(q!=NULL){
+            if(q->left){
+                if(q->right)
+                    q->left->next=q->right;
+                else
+                    q->left->next=get_next_right(q);
+            }
+            if(q->right)
+                q->right->next=get_next_right(q);
+            q=q->next;
+        }
+        if(A->left)
+            A=A->left;
+        else if(A->right)
+            A=A->right;
+        else
+            A=get_next_right(A);
+    }
+}
+
+
+
+/**** rucusive
+
+void connectRecur(struct node* p)
+{
+    // Base case
+    if (!p)
+       return;
+ 
+    /* Before setting nextRight of left and right children, set nextRight
+    of children of other nodes at same level (because we can access 
+    children of other nodes using p's nextRight only) */
+    if (p->nextRight != NULL)
+       connectRecur(p->nextRight);
+ 
+    /* Set the nextRight pointer for p's left child */
+    if (p->left)
+    {
+       if (p->right)
+       {
+           p->left->nextRight = p->right;
+           p->right->nextRight = getNextRight(p);
+       }
+       else
+           p->left->nextRight = getNextRight(p);
+ 
+       /* Recursively call for next level nodes.  Note that we call only
+       for left child. The call for left child will call for right child */
+       connectRecur(p->left);
+    }
+ 
+    /* If left child is NULL then first node of next level will either be
+      p->right or getNextRight(p) */
+    else if (p->right)
+    {
+        p->right->nextRight = getNextRight(p);
+        connectRecur(p->right);
+    }
+    else
+       connectRecur(getNextRight(p));
+}
+
+*****/

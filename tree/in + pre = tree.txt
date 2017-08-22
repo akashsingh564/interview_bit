@@ -1,0 +1,26 @@
+int pre_index;
+
+inline int find(vector<int> &inorder, int key, int start, int end){
+    for(int i=start;i<=end;i++)
+        if(inorder[i]==key)
+            return i;
+}
+
+TreeNode* build_tree (vector<int> &preorder, vector<int> &inorder, int start, int end){
+    if(start>end)
+        return NULL;
+    TreeNode* node=new TreeNode(preorder[pre_index]);
+    pre_index++;
+    if(start==end)
+        return node;
+    int in_index=find(inorder,node->val,start,end);
+    node->left=build_tree(preorder, inorder, start, in_index-1);
+    node->right=build_tree(preorder, inorder, in_index+1, end);
+    return node;
+}
+
+TreeNode* Solution::buildTree(vector<int> &preorder, vector<int> &inorder) {
+    pre_index=0;
+    int n=preorder.size();
+    return build_tree(preorder, inorder, 0, n-1);
+}

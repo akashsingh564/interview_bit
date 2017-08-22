@@ -1,0 +1,47 @@
+TreeNode* find_lca_recurs(TreeNode* A, int val1, int val2, bool &v1, bool &v2){
+    if(A==NULL)
+        return NULL;
+    if(A->val==val1){
+        v1=true;
+        return A;
+    }
+    if(A->val==val2){
+        v2=true;
+        return A;
+    }
+    TreeNode* left_lca=find_lca_recurs(A->left,val1,val2,v1,v2);
+    TreeNode* right_lca=find_lca_recurs(A->right,val1,val2,v1,v2);
+    if(left_lca && right_lca)
+        return A;
+    return (left_lca?left_lca:right_lca);
+}
+
+bool find(TreeNode* A, int v){
+    if(A==NULL)
+        return false;
+    if(A->val==v || find(A->left,v) || find(A->right,v))
+        return true;
+    return false;
+}
+
+int find_lca(TreeNode* A, int val1, int val2){
+    bool v1=false, v2=false;
+    TreeNode* lca=find_lca_recurs(A,val1,val2,v1,v2);
+    if((v1 && v2) || v1 && find(lca,val2) || v2 && find(lca,val1))
+        return lca->val;
+    return -1;
+
+    /*
+    if(find(A,val1) && find(A,val2)){
+        TreeNode* lca=find_lca_recurs(A,val1,val2,v1,v2);
+        return lca->val;
+    }
+    return -1;
+    */
+
+
+}
+
+int Solution::lca(TreeNode* A, int val1, int val2) {
+    return find_lca(A,val1,val2);
+}

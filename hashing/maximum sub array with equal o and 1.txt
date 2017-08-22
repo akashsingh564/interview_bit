@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+#include <stdlib.h>
+using namespace std;
+
+int max(int a, int b) { return a>b? a: b; }
+
+int findSubArray(int arr[], int n)
+{
+	int maxsize = -1, startindex, endindex, sum=0; 
+	map <int,int> m;
+	m[0]=0;
+	for(int i=1;i<=n;i++){
+	    sum=sum+(arr[i-1]==0?-1:1);
+	    if(m.find(sum)!=m.end()){
+	        if(maxsize<i-m[sum]){
+	            maxsize=i-m[sum];
+	            startindex=m[sum];
+	            endindex=i-1;
+	        }
+	    }
+	    else
+	        m[sum]=i;
+	}
+	
+	if (maxsize == -1)
+		printf("No such subarray");
+	else
+		printf("%d to %d", startindex, endindex);
+
+	return maxsize;
+}
+
+/* Driver program to test above functions */
+int main()
+{
+	int arr[] = {1, 0, 0, 1, 0, 1, 1};
+	int size = sizeof(arr)/sizeof(arr[0]);
+
+    findSubArray(arr, size);
+	return 0;
+}

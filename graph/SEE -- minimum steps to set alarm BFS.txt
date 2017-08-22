@@ -1,0 +1,114 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define mp make_pair
+#define ff first
+#define ss second
+typedef pair <pair <int,int>, int> p;
+
+int visit[15][65][5], dist[15][65][5];
+queue <p> q;
+int t,hx,mx,hy,my,fx,fy,dis;
+char xx[5], yy[5];
+
+int hr_plus(int hr, int min, int f){
+    hr++;
+    if(hr>12)
+        hr=1;
+    if(hr==12)   
+        f^=1;
+    if(!visit[hr][min][f])
+        q.push(mp(mp(hr,min),f));
+}
+
+int hr_minus(int hr, int min, int f){
+    hr--;
+    if(hr<1)
+        hr=12;
+    if(hr==11)
+        f^=1;
+    if(!visit[hr][min][f])
+        q.push(mp(mp(hr,min),f));
+}
+
+int min_plus(int hr, int min, int f){
+    min++;
+    if(min<=59){
+        if(!visit[hr][min][f])
+            q.push(mp(mp(hr,min),f));
+    }
+    else{
+        min=0;
+        hr_plus(hr,min,f);
+    }
+}
+
+int min_minus(int hr, int min, int f){
+    min--;
+    if(min>=0){
+        if(!visit[hr][min][f])
+            q.push(mp(mp(hr,min),f));
+    }
+    else{
+        min=59;
+        hr_minus(hr,min,f);
+    }
+}
+
+int toggle(int hr, int min, int f){
+    f^=1;
+    if(!visit[hr][min][f])
+        q.push(mp(mp(hr,min),f));
+}
+
+
+int bfs(int hx, int mx, int fx, int hy, int my, int fy){
+    int steps=0;
+    q.push(mp(mp(hx,mx),fx));
+    
+    while(!q.empty()){
+        int s=q.size();
+        for(int i=0;i<s;i++){
+            p t=q.front();
+            q.pop();
+            if(visit[t.ff.ff][t.ff.ss][t.ss])
+                continue;
+                
+            visit[t.ff.ff][t.ff.ss][t.ss]=1;
+            dist[t.ff.ff][t.ff.ss][t.ss]=steps;
+            
+            hr_plus(t.ff.ff,t.ff.ss,t.ss);
+            hr_minus(t.ff.ff,t.ff.ss,t.ss);
+            min_plus(t.ff.ff,t.ff.ss,t.ss);
+            min_minus(t.ff.ff,t.ff.ss,t.ss);
+            toggle(t.ff.ff,t.ff.ss,t.ss);
+        }
+        steps++;
+    }
+    return dist[hy][my][fy];
+}
+
+int main(){
+    cin>>t;
+    while(t--){
+        memset(visit,0,sizeof(visit));
+        memset(dist,0,sizeof(dist));
+        
+        scanf("%d:%d %s %d:%d %s", &hx, &mx, xx, &hy, &my, yy);
+        
+        if(strcmp(xx, "pm")==0)
+            fx=1;
+        else
+            fx=0;
+        if(strcmp(yy, "pm")==0)
+            fy=1;
+        else
+            fy=0;
+        
+        dis=bfs(hx,mx,fx,hy,my,fy);
+        cout<<dis<<endl;
+    }
+    return 0;
+}
+

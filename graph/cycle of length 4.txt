@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+//works for non densly connected graphs, logic: two ways to reach a vertex with distance 2
+
+
+/*int adj[2005][2005];
+int visit[2005], dist[2005];
+int n;
+long long ans;
+
+int dfs(int u){
+    memset(visit,0,sizeof(visit));
+    memset(dist,-1,sizeof(dist));
+    dist[u]=0;
+    queue <int> q;
+    q.push(u);
+    while(!q.empty()){
+        int t=q.front();
+        q.pop();
+        if(visit[t])
+            continue;
+        visit[t]=1;
+        for(int i=1;i<=n;i++){
+            if(adj[t][i]){
+                if(dist[i]==-1){
+                    dist[i]=1+dist[t];
+                    q.push(i);
+                }
+                else if(dist[i]==2 && dist[t]==1){
+                    ans++;
+                }
+            }
+        }
+    }
+    return 0; 
+}
+
+int main(){
+    scanf("%d", &n);
+    for(int i=1;i<=n;i++) {
+    	for(int j=1;j<=n;j++) {
+    		scanf("%d", &adj[i][j]);
+    	}
+    }
+    
+    for(int i=1;i<=n;i++)
+        dfs(i);
+    
+    cout<<ans/4<<endl;
+    return 0;
+}*/
+
+bitset <2005> g[2005], com;
+int n;
+
+int main(){
+    scanf("%d", &n);
+    for(int i=1;i<=n;i++) {
+    	for(int j=1;j<=n;j++) {
+    		int x;
+    		scanf("%d", &x);
+    		g[i][j]=x;
+    	}
+    }
+    
+    long long ans=0;
+    for(int i=1;i<=n;i++) {
+    	for(int j=i+1;j<=n;j++) {
+    		long long cnt=0;
+    		cnt=(g[i]&g[j]).count();
+    		ans+=cnt*(cnt-1)/2;
+    	}
+    }
+    cout<<ans/2<<endl;
+    return 0;
+}

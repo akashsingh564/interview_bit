@@ -1,0 +1,26 @@
+vector<vector<int> > res;
+
+void find_path(TreeNode* root, vector<int> a, int curr_sum, int sum){
+    if(root==NULL)
+        return;
+    a.push_back(root->val);
+    curr_sum+=root->val;
+    if(!root->left && !root->right && curr_sum==sum){
+        res.push_back(a);
+        return;
+    }
+    else{
+        find_path(root->left,a,curr_sum,sum);
+        find_path(root->right,a,curr_sum,sum);
+    }
+}
+
+vector<vector<int> > Solution::pathSum(TreeNode* root, int sum) {
+    res.resize(0);
+    vector<int> a;
+    find_path(root,a,0,sum);
+    return res;
+}
+
+//if passing 'a' by reference then pop_back() the leaf element
+//also pop_back() after end of recursive calls to the current root

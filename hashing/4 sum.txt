@@ -1,0 +1,33 @@
+vector<vector<int> > Solution::fourSum(vector<int> &A, int B) {
+    vector<vector<int> > res;
+    set<vector<int> >s;
+    int n=A.size();
+    sort(A.begin(),A.end());
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            int key=B-(A[i]+A[j]);
+            int l=j+1;
+            int r=n-1;
+            while(l<r){
+                int sum=A[l]+A[r];
+                if(sum==key){
+                    vector<int> temp;
+                    temp.push_back(A[i]);
+                    temp.push_back(A[j]);
+                    temp.push_back(A[l]);
+                    temp.push_back(A[r]);
+                    s.insert(temp);
+                    l++;
+                    r--;
+                }
+                else if(sum<key)
+                    l++;
+                else
+                    r--;
+            }
+        }
+    }
+    for(auto it:s)
+        res.push_back(it);
+    return res;
+}

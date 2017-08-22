@@ -1,0 +1,40 @@
+typedef pair<string,int> p;
+
+bool is_match(string a, string b){
+    if(a.size()!=b.size())
+        return false;
+    int count=0;
+    for(int i=0;i<a.size();i++)
+        if(a[i]!=b[i])
+            count++;
+    return (count==1);
+}
+
+int Solution::ladderLength(string start, string end, vector<string> &dictV) {
+    if(start==end)
+        return 1;
+    set <string> s;
+    for(int i=0;i<dictV.size();i++)
+        s.insert(dictV[i]);
+    s.erase(start);
+    queue <p> q;
+    q.push(make_pair(start,1));
+    
+    while(!q.empty()){
+        p t=q.front();
+        q.pop();
+        //cout<<"poped "<<t.first<<" "<<t.second<<endl;
+        for(auto it:s){
+            string temp=it;
+            //cout<<"testing "<<temp<<endl;
+            if(is_match(t.first,temp)){
+                if(temp==end)
+                    return 1+t.second;
+                //cout<<"pushing "<<temp<<endl;
+                q.push(make_pair(temp,t.second+1));
+                s.erase(temp);
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,24 @@
+vector<int> Solution::preorderTraversal(TreeNode* A) {
+    vector <int> res;
+
+    stack <TreeNode*> s;
+    TreeNode* cur=A;
+    bool done=false;
+    while(!done){
+        if(cur!=NULL){
+            res.push_back(cur->val);
+            if(cur->right)
+                s.push(cur->right);
+            cur=cur->left;
+        }
+        else{
+            if(s.empty())
+                done=true;
+            else{
+                cur=s.top();
+                s.pop();
+            }
+        }
+    }
+    return res;
+}

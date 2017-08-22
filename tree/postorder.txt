@@ -1,0 +1,35 @@
+/****
+Like pre-order
+Instead of printing an item, we push it to a stack.
+We push left subtree before right subtree.
+****/
+
+
+vector<int> Solution::postorderTraversal(TreeNode* A) {
+    stack <TreeNode*> s1;
+    stack <int> s2;
+    vector <int> res;
+    TreeNode* cur=A;
+    bool done=false;
+    while(!done){
+        if(cur){
+            s2.push(cur->val);
+            if(cur->left)
+                s1.push(cur->left);
+            cur=cur->right;
+        }
+        else{
+            if(s1.empty())
+                done=true;
+            else{
+                cur=s1.top();
+                s1.pop();
+            }
+        }
+    }
+    while(!s2.empty()){
+        res.push_back(s2.top());
+        s2.pop();
+    }
+    return res;
+}

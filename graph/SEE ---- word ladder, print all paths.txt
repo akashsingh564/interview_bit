@@ -1,0 +1,99 @@
+/*
+We do normal BFS as is done for calculating the shortest path. 
+We only take care of all the possible parents for a node which happens in following 2 cases : 
+1) Node x discovers node y and y is unvisited. x is parent of y. 
+2) Node x discovers node y and y is visited and distance[y] = distance[x] + 1. 
+
+Once we have constructed the parents, we do backtracking to construct all possible path combinations 
+back from target to source. 
+
+Note that since we are constructing the reverse path, it might be helpful to swap 
+start and end in the beginning.
+*/
+
+vector<vector<string> > res;
+
+void build_path(string cur, string des, vector<string> &temp, map<string,vector<string> > par){
+    if(cur==des){
+        temp.push_back(cur);
+        res.push_back(temp);
+        temp.pop_back();
+        return;
+    }
+    temp.push_back(cur);
+    for(int i=0;i<par[cur].size();i++)
+        build_path(par[cur][i], des, temp, par);
+    temp.pop_back();
+}
+
+int is_neighbour(string a, string b){
+    int c=0;
+    for(int i=0;i<a.size();i++)
+        if(a[i]!=b[i])
+            c++;
+    return (c==1);
+}
+
+vector<vector<string> > Solution::findLadders(string start, string end, vector<string> &dict) {
+    
+    map<string,vector<string> > par;
+    map<string,int> dist;
+    map<string,int> visit;
+    queue <string> q;
+    set <string> s;
+    vector<string> temp;
+    
+    res.resize(0);
+    
+    if(start==end){
+        temp.push_back(start);
+        res.push_back(temp);
+        return res;
+    }
+    
+    for(int i=0;i<dict.size();i++)
+        s.insert(dict[i]);
+        
+    q.push(end);
+    dist[end]=0;
+    s.erase(end);
+    
+    while(!q.empty()){
+        string top=q.front();
+        q.pop();
+        
+        if(visit[top])
+            continue;
+        visit[top]=1;
+        
+        for(auto it:s){
+            string temp=it;
+            if(!visit[temp] && is_neighbour(temp,top)){
+                
+                if(dist[temp]==0){
+                    dist[temp]=1+dist[top];
+                    par[temp].push_back(top);
+                }
+                
+                else{
+                    if(dist[temp]==dist[top]+1)
+                        par[temp].push_back(top);
+                }
+                q.push(temp);
+            }
+        }
+    }
+    
+    /*for(auto it:dist)
+        cout<<it.first<<" "<<it.second<<endl;
+    for(auto it:par){
+        cout<<it.first<<"-> ";
+        for(int i=0;i<it.second.size();i++)
+            cout<<it.second[i]<<" ";
+        cout<<endl;
+    }*/
+    
+    temp.clear();
+    build_path(start,end,temp,par);
+    return res;
+}

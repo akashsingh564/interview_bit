@@ -1,0 +1,42 @@
+vector<int> Solution::equal(vector<int> &A) {
+    vector<int> res;
+    map<int,pair<int,int> >m;
+    int n=A.size();
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            int sum=A[i]+A[j];
+            if(m.find(sum)==m.end()){
+                m[sum]=make_pair(i,j);
+                continue;
+            }
+            
+            pair<int,int> p=m[sum];
+            
+            //index property
+            if(p.first!=i && p.first!=j && p.second!=i && p.second!=j){
+                vector<int> temp;
+                temp.push_back(p.first);
+                temp.push_back(p.second);
+                temp.push_back(i);
+                temp.push_back(j);
+                //lex order
+                if(res.size()==0)
+                    res=temp;
+                else{
+                    bool flag=false;
+                    for(int i=0;i<res.size();i++){
+                        if(temp[i]>res[i])
+                            break;
+                        if(temp[i]<res[i]){
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if(flag)
+                        res=temp;
+                }
+            }
+        }
+    }
+    return res;
+}

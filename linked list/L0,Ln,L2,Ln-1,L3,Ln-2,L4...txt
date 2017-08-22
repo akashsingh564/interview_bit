@@ -1,0 +1,48 @@
+ListNode* combine (ListNode* A, ListNode* B, ListNode* mid){
+    ListNode* res=A, *temp=NULL, *last=new ListNode(0);
+    while(A && B){
+        temp=A;
+        A=A->next;
+        temp->next=B;
+        B=B->next;
+        last->next=temp;
+        last=temp->next;
+    }
+    if(mid){
+        last->next=mid;
+        mid->next=NULL;
+    }
+    return res;
+}
+
+ListNode* reverse (ListNode* head){
+    ListNode *cur=head, *pre=NULL, *nex;
+    while(cur){
+        nex=cur->next;
+        cur->next=pre;
+        pre=cur;
+        cur=nex;
+    }
+    head=pre;
+    return head;
+}
+
+ListNode* Solution::reorderList(ListNode* A) {
+    if(A==NULL || A->next==NULL)
+        return A;
+    ListNode *slow=A, *fast=A, *prev, *first, *second, *mid=NULL;
+    while(fast && fast->next){
+        prev=slow;
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    if(fast!=NULL){
+        mid=slow;
+        slow=slow->next;
+    }
+    first=A;
+    second=slow;
+    prev->next=NULL;
+    second=reverse(second);
+    return combine(first,second,mid);
+}

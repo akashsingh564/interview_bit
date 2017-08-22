@@ -1,0 +1,39 @@
+string Solution::minWindow(string S, string T) {
+    int str_l=S.size(), pat_l=T.size();
+    
+    if(pat_l>str_l)
+        return "";
+        
+    int hash_pat[256], hash_str[256];
+    int count=0, start=0, start_index=-1, min_len=INT_MAX;
+    memset(hash_pat,0,sizeof(hash_pat));
+    memset(hash_str,0,sizeof(hash_str));
+
+    for(int i=0;i<pat_l;i++)
+        hash_pat[T[i]]++;
+        
+    for(int i=0;i<str_l;i++){
+        hash_str[S[i]]++;
+        
+        if(hash_pat[S[i]] && hash_str[S[i]]<=hash_pat[S[i]])
+            count++;
+            
+        if(count==pat_l){
+            while(hash_str[S[start]]>hash_pat[S[start]] || hash_pat[S[start]]==0){
+                if(hash_str[S[start]]>hash_pat[S[start]])
+                    hash_str[S[start]]--;
+                start++;
+            }
+            
+            int cur_len=i-start+1;
+            if(cur_len<min_len){
+                min_len=cur_len;
+                start_index=start;
+            }
+        }
+    }
+    
+    if(start_index==-1)
+        return "";
+    return S.substr(start_index,min_len);
+}

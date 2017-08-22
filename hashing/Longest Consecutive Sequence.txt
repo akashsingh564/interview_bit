@@ -1,0 +1,20 @@
+int Solution::longestConsecutive(const vector<int> &A) {
+    int cur_len=0, max_len=0, key=INT_MAX;
+    map <int,bool> m;
+    for(int i=0;i<A.size();i++){
+        m[A[i]]=true;
+        key=min(key,A[i]);
+    }
+    key=key-1;
+    for(auto it:m){
+        if(it.first==key+1)
+            cur_len++;
+        else{
+            max_len=max(max_len,cur_len);
+            cur_len=1;
+        }
+        key=it.first;
+    }
+    max_len=max(max_len,cur_len);
+    return max_len;
+}
