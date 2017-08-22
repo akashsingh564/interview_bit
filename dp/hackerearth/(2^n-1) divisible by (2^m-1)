@@ -1,0 +1,27 @@
+//https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/algorithm/power-of-twos-1/description/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int t,q;
+const int n=1000000;
+int facts[1000005];
+
+int seive(){
+    for(int i=2;i<=n;i++){
+        for(int j=2*i;j<=n;j+=i)
+            facts[j]++;
+    }
+    for(int i=2;i<=n;i++)
+        facts[i]=facts[i]+facts[i-1]+1;
+}
+
+int main(){
+    seive();
+    cin>>t;
+    while(t--){
+        cin>>q;
+        cout<<facts[q]<<endl;
+    }
+    return 0;
+}

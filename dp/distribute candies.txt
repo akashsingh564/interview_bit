@@ -1,0 +1,35 @@
+//https://stackoverflow.com/questions/11292913/candies-interviewstreet
+
+
+int Solution::candy(vector<int> &ratings) {
+    int n=ratings.size();
+    vector <int> candies (n,1);
+    for(int i=1;i<n;i++)
+        if(ratings[i]>ratings[i-1]) 
+            candies[i] = candies[i-1]+1;
+    for(int i=n-2;i>=0;i--)
+        if(ratings[i]>ratings[i+1]) 
+            candies[i]=max(candies[i],candies[i+1]+1);
+    for(int i=1;i<n;i++)
+        candies[i]+=candies[i-1];
+    return candies[n-1];
+}
+
+
+/*
+if( ra[i] > ra[i-1] )
+        dp[i] = dp[i-1] + 1;
+    else if( dp[i-1] == 1 ){
+        dp[i] = 1;
+        for( int j=i-1; j>0; j-- )
+            if( ra[j] > ra[j+1] )
+                dp[j] = max ( dp[j+1] + 1, dp[j] );
+            else
+                break;
+    }       
+    else
+        dp[i] = 1;
+}
+long long sum = 0;
+for(int i = 1;i <= n; i++)sum+= dp[i];
+*/

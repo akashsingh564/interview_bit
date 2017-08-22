@@ -1,0 +1,17 @@
+bool mem[105][105][105];
+
+int match (string A, string B, string C, int i, int j, int k){
+    if(i==A.length() && j==B.length())
+        return k==C.length();
+    mem[i][j][k]=0;
+    if(i<A.size() && A[i]==C[k])
+        mem[i][j][k]=mem[i][j][k] | match(A,B,C,i+1,j,k+1);
+    if(j<B.size() && B[j]==C[k])
+        mem[i][j][k]= mem[i][j][k] | match(A,B,C,i,j+1,k+1);
+    return mem[i][j][k];
+} 
+
+int Solution::isInterleave(string A, string B, string C) {
+    memset(mem,-1,sizeof(mem));
+    return match(A,B,C,0,0,0);
+}

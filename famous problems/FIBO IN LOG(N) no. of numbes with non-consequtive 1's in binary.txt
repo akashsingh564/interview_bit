@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define ll long long
+
+ll t,n;
+
+void multiply (ll F[2][2], ll M[2][2]){
+    ll a=((F[0][0] * M[0][0]) %MOD + (F[0][1] * M[1][0]) %MOD) %MOD;
+    ll b=((F[0][0] * M[0][1]) %MOD + (F[0][1] * M[1][1]) %MOD) %MOD;
+    ll c=((F[1][0] * M[0][0]) %MOD + (F[1][1] * M[1][0]) %MOD) %MOD;
+    ll d=((F[1][0] * M[0][1]) %MOD + (F[1][1] * M[1][1]) %MOD) %MOD;
+    F[0][0]=a;
+    F[0][1]=b;
+    F[1][0]=c;
+    F[1][1]=d;
+    return;
+}
+
+void power(ll F[2][2], ll n){
+    if(n==1)
+        return;
+    ll M[2][2]={{1,1},{1,0}};
+    power(F,n/2);
+    multiply(F,F);
+    if(n%2!=0)
+        multiply(F,M);
+}
+
+ll fibo(ll n){
+    ll F[2][2]={{1,1},{1,0}};
+    power(F,n-1);
+    return F[0][0]%MOD;
+}
+
+int main(){
+    cin>>t;
+    while(t--){
+        cin>>n;
+        cout<<fibo(n+2)<<endl;
+    }
+    return 0;
+}

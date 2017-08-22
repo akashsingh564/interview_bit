@@ -1,0 +1,32 @@
+int Solution::jump(vector<int> &A) {
+    int n=A.size();
+    if(n==1)
+        return 0;
+    if(n==0 || A[0]==0)
+        return -1;
+    /*int dp[n];
+    for(int i=0;i<n;i++)
+        dp[i]=INT_MAX;
+    dp[0]=0;
+    for(int i=0;i<n;i++)
+        for(int j=i+1;j<=i+A[i] && j<A.size();j++)
+            dp[j]=min(dp[j],1+dp[i]);
+    return dp[n-1];*/
+    int maxReach = A[0];
+    int step = A[0];
+    int jump = 1;
+
+    for (int i = 1; i < n; i++){
+        if (i==n-1)
+            return jump;
+        maxReach=max(maxReach, i+A[i]);
+        step--;
+        if (step == 0){
+            jump++;
+            if(i>=maxReach)
+                return -1;
+            step = maxReach - i;
+        }
+    }
+    return jump;
+}

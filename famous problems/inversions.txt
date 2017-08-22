@@ -1,0 +1,37 @@
+int merge(vector<int> &A, int temp[], int l, int mid, int r){
+    int i=l,j=mid,k=l, inversion=0;
+    while(i<=mid-1 && j<=r){
+        if(A[i]<=A[j])
+            temp[k++]=A[i++];
+        else{
+            temp[k++]=A[j++];
+            inversion+=(mid-i);
+        }
+    }
+    while(i<=mid-1)
+        temp[k++]=A[i++];
+    while(j<=r)
+        temp[k++]=A[j++];
+    for(int i=l;i<=r;i++)
+        A[i]=temp[i];
+    return inversion;
+    
+}
+
+int merge_sort(vector<int> &A, int temp[], int l, int r){
+    int inversion=0,mid;
+    if(l<r){
+        mid=(l+r)/2;
+        inversion=merge_sort(A,temp,l,mid);
+        inversion+=merge_sort(A,temp,mid+1,r);
+        inversion+=merge(A,temp,l,mid+1,r);
+    }
+    return inversion;
+}
+
+int Solution::countInversions(vector<int> &A) {
+    int inversions=0;
+    int temp[A.size()];
+    inversions=merge_sort(A,temp,0,A.size()-1);
+    return inversions;
+}

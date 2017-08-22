@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define ff first
+#define ss second
+ 
+typedef pair <ll, int> p;
+ 
+vector <bool> marked (10000005,false);
+vector <ll> primes;
+vector <p> factors;
+vector <ll> ans;
+ 
+ll t,n;
+ 
+inline int seive(){
+    primes.clear();
+    for(int i=2;i<10000005;i++){
+        if(marked[i]==false){
+            primes.push_back(i);
+            for(int j=2*i;j<10000005;j+=i)
+                marked[j]=true;
+        }
+    }
+    return 1;
+}
+ 
+inline int prime_factors(ll n){
+    for(int i=0; i<primes.size() && primes[i]*primes[i]<=n && n!=1; i++){
+        int c=0;
+        while(n%primes[i]==0){
+            n/=primes[i];
+            c++;
+        }
+        if(c)
+            factors.push_back({primes[i],c});
+    }
+    if(n>1)
+        factors.push_back({n,1});
+}
+ 
+int factorize(ll cur, int st){
+    for(int i=st;i<factors.size();i++){
+        ll x=cur;
+        for(int j=0;j<factors[i].ss;j++){
+            x*=factors[i].ff;
+            ans.push_back(x);
+            factorize(x,i+1);
+        }
+    }
+}
+ 
+int main(){
+    seive();
+    cin>>t;
+    while(t--){
+        factors.clear();
+        ans.clear();
+        cin>>n;
+        prime_factors(n);
+        factorize(1,0);
+        sort(ans.begin(),ans.end());
+        ans.pop_back();
+        for(auto it:ans)
+            cout<<it<<" ";
+        cout<<endl;
+    }
+    return 0;
+}

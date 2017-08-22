@@ -1,0 +1,111 @@
+//http://www.geeksforgeeks.org/given-an-array-arr-find-the-maximum-j-i-such-that-arrj-arri/
+#include <bits/stdc++.h>
+using namespace std;
+
+int lmax[100005], rmin[100005], a[100005];
+int t,n;
+vector <pair<int,int>> v;
+
+//O(NlogN using sorting)
+int solve(){
+    v.clear();
+    for(int i=0;i<n;i++)
+        v.push_back(make_pair(a[i],i));
+        
+    sort(v.rbegin(),v.rend());
+    
+    //find max index to the right
+    int max_diff=INT_MIN, max_so_far=INT_MIN;
+    for(int i=n-1;i>=0;i--){
+        max_so_far=max(max_so_far,v[i].second);
+        max_diff=max(max_diff,max_so_far-v[i].second+1);
+    }
+    
+    cout<<max_diff<<endl;
+}
+
+/* O(N) from GFG
+int solve(){
+    memset(lmax,0,sizeof(lmax));
+    memset(rmin,0,sizeof(rmin));
+    
+    lmax[0]=a[0];
+    for(int i=1;i<n;i++)
+        lmax[i]=max(lmax[i-1],a[i]);
+        
+    rmin[n-1]=a[n-1];
+    for(int i=n-2;i>=0;i--)
+        rmin[i]=min(rmin[i+1],a[i]);
+        
+    int i=0,j=0,ans=0;
+    while(i<n && j<n){
+        if(lmax[i]>=rmin[j]){
+            ans=max(ans,j-i+1);
+            j++;
+        }
+        else
+            i++;
+    }
+    
+    cout<<ans<<endl;
+    return 0;
+}*/
+
+/* SEGMENT TREE, 
+    find max index to the right, same as method 1
+    
+int tree[1000001];
+int final[1000001];
+
+void build(int i,int start,int end){
+	if(start==end){
+		tree[i]=final[start];
+		return ;
+	}
+	else{
+		int mid = (start+end)/2;
+		build(2*i+1,start,mid);
+		build(2*i+2,mid+1,end);
+		tree[i] = max(tree[2*i+1],tree[2*i+2]);
+	}
+}
+int query(int node,int l,int r,int lr,int rr){
+	if(rr<l || lr > r)
+		return INT_MIN;
+	else{
+		if(lr<=l&&r<=rr)
+			return tree[node];
+		return max(query(2*node+1,l,(l+r)/2,lr,rr),query(2*node+2,((l+r)/2)+1,r,lr,rr));
+	}
+}
+
+void solve(string input,string output){
+		memset(tree,0,sizeof(tree));
+		for(int i=0;i<n;i++)
+			v.push_back({a[i],i});
+		sort(vec.begin(),vec.end());
+		for(int i=0;i<n;i++)
+			final[i]=vec[i].second;
+		build(0,0,n-1);
+		int ans = 1;
+		for(int i=n-1;i>=0;i--)
+		{
+			int first = vec[i].second;
+			int second = query(0,0,n-1,0,i-1);
+			if(second>first)
+				ans = max(ans,second-first+1);
+		}
+		cout<<ans<<endl;
+}
+*/
+
+int main(){
+    cin>>t;
+    while(t--){
+        cin>>n;
+        for(int i=0;i<n;i++)
+            cin>>a[i];
+        solve();
+    }
+    return 0;
+}

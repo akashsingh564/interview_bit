@@ -1,0 +1,24 @@
+#define MOD 1000000007
+int dp[1005][50005];
+
+int count(int A, int B){
+    if(A==0)
+        return B==0;
+    if(dp[A][B]!=-1)
+        return dp[A][B];
+    long long ans=0;
+    for(int i=0;i<10;i++)
+        if(B-i>=0)
+            ans=(ans+((long long)count(A-1,B-i))%MOD)%MOD;
+    dp[A][B]=(int)ans;
+    return dp[A][B];
+}
+
+int Solution::solve(int A, int B) {
+    long long ans=0;
+    memset(dp,-1,sizeof(dp));
+    for(int i=1;i<10;i++)
+        if(B-i>=0)
+            ans=(ans+((long long)count(A-1,B-i))%MOD)%MOD;
+    return (int)ans;
+}

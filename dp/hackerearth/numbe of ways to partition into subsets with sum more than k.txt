@@ -1,0 +1,57 @@
+//https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/algorithm/k-distribution/description/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define ll long long
+
+ll two_pow_n(int n){
+    if(n==1)
+        return 2;
+    ll temp=two_pow_n(n/2);
+    ll ans=(temp*temp)%MOD;
+    if(n%2==1)
+        ans=(2*ans)%MOD;
+    return ans;
+}
+
+int n,k,x;
+ll sum,invalid_subsets,ans;
+vector <int> a;
+ll dp[105][100005];
+
+int main(){
+    cin>>n>>k;
+    for(int i=0;i<n;i++){
+        cin>>x;
+        a.push_back(x);
+        sum+=x;
+    }
+    
+    if(sum<2*k){
+        cout<<0<<endl;
+        return 0;
+    }
+    
+    for(int i=0;i<=n;i++)
+        dp[i][0]=1;
+        
+    for(int i=1;i<=n;i++){
+        for(int w=1;w<k;w++){
+            if(a[i-1]>w)
+                dp[i][w]=dp[i-1][w];
+            else
+                dp[i][w]=(dp[i-1][w]+dp[i-1][w-a[i-1]])%MOD;
+                
+        }
+    }
+    
+    for(int w=0;w<k;w++)
+        invalid_subsets=(invalid_subsets+dp[n][w])%MOD;
+    
+    ans=(((two_pow_n(n))-(2*invalid_subsets)%MOD)+MOD)%MOD;
+    cout<<ans<<endl;
+    
+    return 0;
+}

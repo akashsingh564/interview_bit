@@ -1,0 +1,66 @@
+//https://www.hackerearth.com/practice/algorithms/dynamic-programming/2-dimensional/practice-problems/algorithm/sherlock-and-dice/
+#include <bits/stdc++.h>
+using namespace std;
+
+int t,times,faces,sum;
+int dp[55][10005];
+
+int main(){
+    cin>>t;
+    while(t--){
+        memset(dp,0,sizeof(dp));
+        
+        scanf("%d %d %d",&times,&faces,&sum);
+        
+        if(times>sum || times*faces<sum){
+            printf("0.000 0\n");
+            continue;
+        }
+        if(times==sum || times*faces==sum){
+            int index=0;
+            double prob=1/pow(faces,times);
+            while(prob<1){
+                prob*=10;
+                index++;
+            }
+            printf("%0.3f %d\n",prob,index);
+            continue;
+        }
+        
+        for(int i=1;i<=faces && i<=sum;i++)
+            dp[1][i]=1;
+        
+        for(int roll=2;roll<=times;roll++){
+            for(int j=1;j<=sum;j++){
+                for(int k=1;k<=faces&&k<j;k++){
+                    dp[roll][j]+=dp[roll-1][j-k];
+                }
+            }
+        }
+
+
+        /*****
+        for(int i=1;i<=faces && i<=sum;i++)
+            dp[1][i]=(double)1/faces;
+        
+        for(int roll=2;roll<=times;roll++){
+            for(int j=1;j<=sum;j++){
+                for(int k=1;k<=faces&&k<j;k++){
+                    dp[roll][j]+=dp[roll-1][j-k];
+                }
+                dp[roll][j]/=faces;
+            }
+        }
+        *****/
+        
+        int index=0;
+        double prob=dp[times][sum]/pow(faces,times);
+        while(prob<1){
+            prob*=10;
+            index++;
+        }
+        
+        printf("%0.3f %d\n",prob,index);
+    }
+    return 0;
+}

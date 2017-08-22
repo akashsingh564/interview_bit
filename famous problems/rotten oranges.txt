@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int t,r,c,fresh,ti;
+int a[105][105];
+queue <pair<int,int>> q;
+
+int x[]={1,0,-1,0};
+int y[]={0,1,0,-1};
+
+bool is_safe(int x, int y){
+    return(x>=0 && x<r && y>=0 && y<c && a[x][y]==1);
+}
+
+int dfs(){
+    while(!q.empty()){
+        int sz=q.size();
+        for(int s=0;s<sz;s++){
+            int i=q.front().first;
+            int j=q.front().second;
+            q.pop();
+            for(int k=0;k<4;k++){
+                int u=i+x[k];
+                int v=j+y[k];
+                if(is_safe(u,v)){
+                    fresh--;
+                    a[u][v]=2;
+                    q.push(make_pair(u,v));
+                }
+            }
+        }
+        ti++;
+    }
+    return (fresh==0)?ti-1:-1;
+}
+
+int main() {
+	cin>>t;
+	while(t--){
+	    memset(a,0,sizeof(a));
+	    while(!q.empty())
+	        q.pop();
+	    fresh=0, ti=0;
+	    cin>>r>>c;
+	    for(int i=0;i<r;i++){
+	        for(int j=0;j<c;j++){
+	            cin>>a[i][j];
+	            if(a[i][j]==1)
+	                fresh++;
+	            if(a[i][j]==2)
+	                q.push(make_pair(i,j));
+	        }
+	    }
+	    cout<<dfs()<<endl;
+	}
+	return 0;
+}

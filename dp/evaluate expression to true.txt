@@ -1,0 +1,42 @@
+#define MOD 1003 
+
+int eval_to_true(string symb,string oper){
+    int n=symb.size();
+    int T[n][n], F[n][n];
+    memset(T,0,sizeof(T));
+    memset(F,0,sizeof(F));
+    for(int i=0;i<n;i++){
+        T[i][i]=(symb[i]=='T')?1:0;
+        F[i][i]=(symb[i]=='F')?1:0;
+    }
+    for(int gap=1;gap<n;gap++){
+        for(int i=0,j=gap;j<n;i++,j++){
+            for(int k=i;k<j;k++){
+                if(oper[k]=='&'){
+                    T[i][j]=(T[i][j]+(T[i][k]*T[k+1][j])%MOD)%MOD;
+                    F[i][j]=(F[i][j]+(T[i][k]*F[k+1][j] + F[i][k]*T[k+1][j] + F[i][k]*F[k+1][j])%MOD)%MOD;
+                }
+                if(oper[k]=='|'){
+                    T[i][j]=(T[i][j]+(T[i][k]*F[k+1][j] + F[i][k]*T[k+1][j] + T[i][k]*T[k+1][j])%MOD)%MOD;
+                    F[i][j]=(F[i][j]+(F[i][k]*F[k+1][j])%MOD)%MOD;
+                }
+                if(oper[k]=='^'){
+                    T[i][j]=(T[i][j]+(T[i][k]*F[k+1][j] + F[i][k]*T[k+1][j])%MOD)%MOD;
+                    F[i][j]=(F[i][j]+(T[i][k]*T[k+1][j] + F[i][k]*F[k+1][j])%MOD)%MOD;
+                }
+            }
+        }
+    }
+    return T[0][n-1];
+}
+
+int Solution::cnttrue(string A) {
+    string operators="", operands="";
+    for(int i=0;i<A.size();i++){
+        if(A[i]=='T' || A[i]=='F')
+            operators+=A[i];
+        else
+            operands+=A[i];
+    }
+    return eval_to_true(operators,operands);
+}

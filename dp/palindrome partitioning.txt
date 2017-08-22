@@ -1,0 +1,27 @@
+int is_pallindrome(string A, int l, int r){
+    int len=r-l+1;
+    for(int i=0;i<len/2;i++)
+        if(A[l+i]!=A[r-i])
+            return 0;
+    return 1;
+}
+
+int Solution::minCut(string A) {
+    int n=A.size();
+    int dp[n][n];
+    memset(dp,0,sizeof(dp));
+    //dp[i][i]=0;
+    for(int l=2;l<=n;l++){
+        for(int i=0,j=l-1;j<n;i++,j++){
+            if(is_pallindrome(A,i,j)){
+                dp[i][j]=0;
+            }
+            else{
+                dp[i][j]=INT_MAX;
+                for(int k=i;k<j;k++)
+                    dp[i][j]=min(dp[i][j],(1+dp[i][k]+dp[k+1][j]));
+            }
+        }
+    }
+    return dp[0][n-1];
+}

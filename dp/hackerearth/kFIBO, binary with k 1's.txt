@@ -1,0 +1,26 @@
+//https://www.hackerearth.com/practice/algorithms/dynamic-programming/2-dimensional/practice-problems/algorithm/ikshus-love-for-binary-numbers/description/
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+ll k_fibo[65];
+ll n,k;
+
+//sum of previous k terms
+int gen_k_fibo(ll k){
+    k_fibo[1]=k_fibo[2]=1;
+    for(int i=3;i<65;i++)
+        for(int j=i-1;j>i-k-1 && j>0;j--)
+            k_fibo[i]+=k_fibo[j];
+    
+    return 0;
+}
+
+int main(){
+    cin>>n>>k;
+    gen_k_fibo(k);
+    ll g=__gcd((((long long)(1LL<<n))-k_fibo[n+2]),((long long)(1LL<<n)));
+    cout<<(((long long)(1LL<<n))-k_fibo[n+2])/g<<"/"<<((long long)(1LL<<n))/g<<endl;
+    return 0;
+}

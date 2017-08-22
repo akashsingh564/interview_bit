@@ -1,0 +1,32 @@
+int Solution::adjacent(vector<vector<int> > &A) {
+    int n=A[0].size();
+    int dp[n+1];
+    memset(dp,0,sizeof(dp));
+    dp[1]=max(A[0][0],A[1][0]);
+    for(int i=2;i<=n;i++){
+        int ele=max(A[0][i-1],A[1][i-1]);
+        dp[i]=max(dp[i-1],(ele+dp[i-2]));
+    }
+    return dp[n];
+}
+
+
+/*
+
+int Solution::adjacent(vector<vector<int> > &A) {
+    int n=A[0].size();
+    int dp[2][n+1];
+    memset(dp,0,sizeof(dp));
+    dp[0][1]=A[0][0];
+    dp[1][1]=A[1][0];
+    for(int i=2;i<=n;i++){
+        int rob_max=max(dp[0][i-2],dp[1][i-2]);
+        int dont_rob_max=max(dp[0][i-1],dp[1][i-1]);
+        dp[0][i]=max(dont_rob_max,(A[0][i-1]+rob_max));
+        dp[1][i]=max(dont_rob_max,(A[1][i-1]+rob_max));
+    }
+    return max(dp[0][n],dp[1][n]);
+}
+
+
+*/

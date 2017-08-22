@@ -1,0 +1,29 @@
+//https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/algorithm/xsquare-and-chocolates-bars-2/description/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[1000005];
+string s;
+int t;
+
+inline bool is_valid(int i){
+    return (!(s[i]==s[i-1] && s[i-1]==s[i-2]));
+}
+
+int main(){
+    cin>>t;
+    while(t--){
+        memset(dp,0,sizeof(dp));
+        cin>>s;
+        int n=s.size();
+        int mx=0;
+        for(int i=2;s[i];i++){
+            if(is_valid(i))
+                dp[i+1]=1+dp[i-2];
+            mx=max(mx,dp[i+1]);
+        }
+        cout<<n-(mx*3)<<endl;
+    }
+    return 0;
+}

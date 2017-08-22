@@ -1,0 +1,46 @@
+https://www.hackerearth.com/practice/algorithms/dynamic-programming/introduction-to-dynamic-programming-1/practice-problems/algorithm/rhezo-and-prime-problems/description/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool seive[5005];
+int sum[5005];
+int dp[5005];
+vector <int> primes;
+
+int n, size;
+
+inline int find_primes(){
+    memset(seive,false,sizeof(seive));
+    for(int i=2;i<5005;i++){
+        if(seive[i]==false){
+            primes.push_back(i);
+            for(int j=2*i;j<5005;j+=i)
+                seive[j]=true;
+        }
+    }
+    return 1;
+}
+
+
+int main(){
+    find_primes();
+    cin>>n;
+    
+    for(int i=1;i<=n;i++){
+        cin>>sum[i];
+        sum[i]=sum[i]+sum[i-1];
+    }
+    
+    for(int i=2;i<=n;i++){
+        dp[i]=dp[i-1];
+        for(int j=0;j<primes.size() && primes[j]<=i; j++){
+            if(primes[j]==i)
+                dp[i]=sum[i];
+            else
+                dp[i]=max(dp[i],(sum[i]-sum[i-primes[j]]+dp[i-primes[j]-1]));
+        }
+    }
+    cout<<dp[n]<<endl;
+    return 0;
+}

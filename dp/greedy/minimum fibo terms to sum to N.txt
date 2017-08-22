@@ -1,0 +1,16 @@
+int Solution::fibsum(int A) {
+    vector <int> fib(2,1);
+    int c=0;
+    while(c<A){
+        c=fib[fib.size()-1]+fib[fib.size()-2];
+        fib.push_back(c);
+    }
+    c=0;
+    while(A>0){
+        int idx=lower_bound(fib.begin(),fib.end(),A)-fib.begin();
+        idx=idx-(1-binary_search(fib.begin(),fib.end(),A));
+        A-=fib[idx];
+        c++;
+    }
+    return c;
+}

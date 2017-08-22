@@ -1,0 +1,92 @@
+//https://www.hackerearth.com/practice/data-structures/advanced-data-structures/segment-trees/practice-problems/algorithm/fibonacci-with-gcd-16/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define ll long long
+
+int n,q,l,r,x;
+int a[100005];
+int st[500005];
+
+int gcd(int a, int b){
+    if(b==0)
+        return a;
+    return gcd(b,a%b)%MOD;
+}
+
+inline void multiply(ll F[][2], ll M[][2]){
+    ll a=((F[0][0]*M[0][0])%MOD + (F[0][1]*M[1][0])%MOD)%MOD;
+    ll b=((F[0][0]*M[0][1])%MOD + (F[0][1]*M[1][1])%MOD)%MOD;
+    ll c=((F[1][0]*M[0][0])%MOD + (F[1][1]*M[1][0])%MOD)%MOD;
+    ll d=((F[1][0]*M[0][1])%MOD + (F[1][1]*M[1][1])%MOD)%MOD;
+    F[0][0]=a;
+    F[0][1]=b;
+    F[1][0]=c;
+    F[1][1]=d;
+    return;
+}
+
+void power(ll F[][2], int n){
+    if(n==0 || n==1)
+        return;
+    power(F,n/2);
+    multiply(F,F);
+    if(n&1){
+        ll M[][2]={{1,1},{1,0}};
+        multiply(F,M);
+    }
+    return;
+}
+
+inline ll fib(int n){
+    ll F[][2]={{1,1},{1,0}};
+    power(F,n-1);
+    return F[0][0]%MOD;
+}
+
+void build(int low, int high, int pos){
+    if(low==high){
+        st[pos]=a[low]%MOD;
+        return;
+    }
+    int mid=low+(high-low)/2;
+    build(low,mid,2*pos+1);
+    build(mid+1,high,2*pos+2);
+    st[pos]=gcd(st[2*pos+1],st[2*pos+2]);
+}
+
+inline void cons_seg_tree(int a[], int n){
+    build(0,n-1,0);
+}
+
+int computer_gcd(int node, int start, int end, int left, int right){
+	if(right<start || end<left)
+	    return 0;
+	if(start<=left && right<=end)
+	    return st[node];
+	int m=left+(right-left)/2;
+	return gcd(computer_gcd(2*node+1, start, end, left, m), computer_gcd(2*node+2, start, end, m+1, right));
+}
+
+inline int find_gcd(int ss, int se){
+	if (ss<0 || se > n-1 || ss>se)
+		return -1;
+	return computer_gcd(0,ss,se,0, n-1);
+}
+
+int main(){
+    scanf("%d %d",&n,&q);
+    for(int i=0;i<n;i++)
+        scanf("%d",&a[i]);
+        
+	cons_seg_tree(a, n);
+
+    while(q--){
+    	scanf("%d %d",&l,&r);
+		int key=(find_gcd(l-1,r-1))%MOD;
+		printf("%d\n",fib(key));
+	}
+	return 0;
+}

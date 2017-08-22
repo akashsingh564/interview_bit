@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+ll t,n,l;
+string s;
+
+vector <ll> factorial;
+char ans[25];
+int c[26];
+
+int factorials(){
+    factorial.push_back(1);
+    ll f=1;
+    for(int i=1;i<20;i++){
+        f=f*i;
+        factorial.push_back(f);
+    }
+    return 1;
+}
+
+int solve(){
+    ll p, index=0;
+    int key;
+    while(index<l){
+        p=0;
+        while(n>p){
+            for(int i=0;i<26;i++){
+                if(c[i]!=0){    //current key
+                    key=i;
+                    p=factorial[l-index-1];
+                    for(int j=0;j<26;j++){
+                        if(j==i)
+                            p/=factorial[c[j]-1];
+                        else
+                            p/=factorial[c[j]];
+                    }
+                    if(n<=p)
+                        break;
+                    n-=p;
+                }
+            }
+        }
+        ans[index]=(char)(key+'a');
+        c[key]--;
+        index++;
+    }
+    return 0;
+}
+
+int main(){
+    factorials();
+    cin>>t;
+    while(t--){
+        memset(ans,0,sizeof(ans));
+        memset(c,0,sizeof(c));
+        
+        cin>>s>>n;
+        sort(s.begin(),s.end());
+        //n--;
+        l=s.size();
+        
+        for(int i=0;i<l;i++){
+            c[s[i]-'a']++;
+        }
+        
+        solve();
+        cout<<ans<<endl;
+    }
+    return 0;
+}

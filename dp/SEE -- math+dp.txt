@@ -1,0 +1,57 @@
+//https://www.hackerearth.com/practice/algorithms/dynamic-programming/2-dimensional/practice-problems/algorithm/candy-distribution/description/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define MOD 1000000007
+unordered_map <ll,ll> mem;
+ll n;
+
+ll mod_pow(ll a, ll b){
+    if(b==1)
+        return a;
+    ll temp=mod_pow(a,b>>1);
+    temp=(temp*temp)%MOD;
+    if(b&1)
+        temp=(temp*a)%MOD;
+    return temp;
+}
+
+vector <ll> find_divisors(ll n){
+    vector <ll> res;
+    for(ll i=1;i*i<=n;i++){
+        if(n%i)
+            continue;
+        res.push_back(i);
+        if(i!=1 && n/i!=i)
+            res.push_back(n/i);
+    }
+    return res;
+}
+
+ll solve(ll n){
+    if(n<3)
+        return 1;
+        
+    if(mem.find(n)!=mem.end())
+        return mem[n];
+        
+    ll res=0;
+    vector <ll> divisors = find_divisors(n-1);
+    
+    for(int i=0;i<divisors.size();i++){
+        ll temp=solve(divisors[i]);
+        res=(res+mod_pow(temp,(n-1)/divisors[i]))%MOD;
+    }
+    
+    mem[n]=res;
+    return res;
+}
+
+int main(){
+    cin>>n;
+    ll ans=solve(n);
+    cout<<ans<<endl;
+    return 0;
+}

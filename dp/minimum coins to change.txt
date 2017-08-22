@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[100005];
+int c[100005];
+int t,a,n;
+
+int main(){
+    cin>>t;
+    while(t--){
+        for(int i=0;i<100005;i++)
+            dp[i]=1e8;
+        memset(c,0,sizeof(c));
+        dp[0]=0;
+        
+        cin>>a;
+        cin>>n;
+        for(int i=0;i<n;i++)
+            cin>>c[i];
+
+        for(int i=0;i<n;i++){
+            for(int j=1;j<=a;j++){
+                if(j>=c[i])
+                    dp[j]=min(dp[j],1+dp[j-c[i]]);
+            }
+        }
+        
+        if(dp[a]!=1e8)
+            cout<<dp[a]<<endl;
+        else
+            cout<<"No solution"<<endl;
+    }
+    return 0;
+}

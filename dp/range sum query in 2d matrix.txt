@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+ll dp[1005][1005];
+int arr[1005][1005];
+int r,c,q,x,y,a,b;
+
+int main(){
+    cin>>r>>c;
+    for(int i=1;i<=r;i++)
+        for(int j=1;j<=c;j++)
+            cin>>arr[i][j];
+            
+    dp[1][1]=arr[1][1];
+    for(int i=2;i<=r;i++)
+        dp[i][1]=dp[i-1][1]+arr[i][1];
+    for(int i=2;i<=c;i++)
+        dp[1][i]=dp[1][i-1]+arr[1][i];
+    for(int i=2;i<=r;i++)
+        for(int j=2;j<=c;j++)
+            dp[i][j]=dp[i-1][j]+dp[i][j-1]+arr[i][j]-dp[i-1][j-1];
+    
+    cin>>q;
+    while(q--){
+        cin>>x>>y>>a>>b;
+        ll sum=dp[a][b]-dp[x-1][b]-dp[a][y-1]+dp[x-1][y-1];
+        cout<<sum<<endl;
+    }
+    return 0;
+}

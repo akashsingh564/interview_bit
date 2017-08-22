@@ -1,0 +1,48 @@
+int Solution::solve(const vector<int> &A) {
+    
+    int n=A.size();
+    int max_len=0;
+    
+    if(n==0 || n==1)
+        return n;
+        
+    map <int,vector<pair<int,int> > >m; //map tp store index pair for each difference
+    
+    for(int i=0;i<n;i++)
+        for(int j=i+1;j<n;j++)
+            m[A[j]-A[i]].push_back(make_pair(i,j));
+            
+    for(auto it:m){
+        //for each difference, find the length of largest sunsequence
+        int temp[n];
+        for(int i=0;i<n;i++)
+            temp[i]=1;
+            
+        for(int i=0;i<it.second.size();i++){
+            temp[it.second[i].second]=temp[it.second[i].first]+1;
+            max_len=max(max_len,temp[it.second[i].second]);
+        }
+    }
+    
+    return max_len;
+    
+    
+    /****  sorted array solution ****/
+    
+    /*int max_len = 1;
+    int map[105][10005];
+
+    memset(map, 0, sizeof(int)*105*10005);
+    for(int i=1;i<A.size();i++) {
+        for(int j=0;j<i;j++) {
+            int diff = A[i] - A[j];
+            if(map[j][diff] == 0)
+                map[i][diff] = 2;
+            else {
+                map[i][diff] =  map[j][diff] + 1;
+                max_len = max(max_len,map[i][diff]);
+            }
+        }
+    }
+    return max_len;    
+}*/

@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[1005][1005];
+int w[1005], v[1005];
+int t,n,W;
+
+int main(){
+    cin>>t;
+    while(t--){
+        memset(w,0,sizeof(w));
+        memset(v,0,sizeof(v));
+        memset(dp,0,sizeof(dp));
+        cin>>n;
+        cin>>W;
+        for(int i=0;i<n;i++)
+            cin>>w[i];
+        for(int i=0;i<n;i++)
+            cin>>v[i];
+        for(int i=0;i<=n;i++){
+            for(int j=0;j<=W;j++){
+                if(i==0 || j==0)
+                    dp[i][j]=0;
+                else{
+                    dp[i][j]=dp[i-1][j];
+                    if(j>=w[i-1])
+                        dp[i][j]=max(dp[i][j],dp[i-1][j-w[i-1]]+v[i-1]);
+                }
+            }
+        }
+        cout<<dp[n][W]<<endl;
+    }
+    return 0;
+}
+

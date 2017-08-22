@@ -1,0 +1,45 @@
+short memoize[100001];
+
+bool word_Break(int index, string &s, unordered_set<string> &dict) {
+    if (index >= s.length()) 
+        return true;
+    if (memoize[index] != -1) 
+        return memoize[index];
+        
+    bool result = false;
+    string substring = "";
+    for (int i = index; i < s.length() && result == false; i++) {
+        substring.push_back(s[i]);
+        if (dict.find(substring) != dict.end()) 
+            result |= word_Break(i + 1, s, dict);
+    }
+    return memoize[index] = result;
+
+    
+}    
+int Solution::wordBreak(string s, vector<string> &dict) {
+    memset(memoize, -1, sizeof(int) * s.length());
+    unordered_set<string> dictSet(dict.begin(), dict.end());
+    return word_Break(0, s, dictSet);
+}
+
+    /*unordered_set <string> s;
+    for(int i=0;i<B.size();i++)
+        s.insert(B[i]);
+    int n=A.size();
+    int dp[n][n];
+    memset(dp,0,sizeof(dp));
+    for(int l=1;l<=n;l++){
+        for(int i=0,j=l-1;j<n;i++,j++){
+            if(s.find(A.substr(i,l))!=s.end())
+                dp[i][j]=1;
+            else{
+                int k=i;
+                while(k<j && !dp[i][j]){
+                    dp[i][j]=dp[i][k]&dp[k+1][j];
+                k++;
+                }
+            }
+        }
+    }
+    return dp[0][n-1];*/

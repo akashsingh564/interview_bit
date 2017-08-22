@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void findZeroes(int arr[], int n, int m){
+	int l = 0, r = 0; 
+	int bestL = 0, bestWindow = 0; 
+	int zeroCount = 0; 
+
+    while(r<n){
+        if(zeroCount<=m){
+            if(arr[r]==0)
+                zeroCount++;
+            r++;
+        }
+        if(zeroCount>m){
+            if(arr[l]==0)
+                zeroCount--;
+            l++;
+        }
+        if(bestWindow<r-l){
+            bestWindow=r-l;
+            bestL=l;
+        }
+    }
+	for (int i=0; i<bestWindow; i++){
+		if (arr[bestL+i] == 0)
+		cout << bestL+i << " ";
+	}
+}
+
+int main(){
+int arr[] = {1, 0, 0, 1, 1, 0, 1, 0, 1, 1};
+int m = 2;
+int n = sizeof(arr)/sizeof(arr[0]);
+cout << "Indexes of zeroes to be flipped are ";
+findZeroes(arr, n, m);
+return 0;
+}

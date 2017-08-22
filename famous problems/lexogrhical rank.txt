@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+
+ll t,n;
+string s;
+
+vector <ll> factorial;
+char ans[25];
+
+int factorials(){
+    factorial.push_back(1);
+    ll f=1;
+    for(int i=1;i<20;i++){
+        f=f*i;
+        factorial.push_back(f);
+    }
+    return 1;
+}
+
+int main(){
+    factorials();
+    cin>>t;
+    while(t--){
+        cin>>s>>n;
+        memset(ans,0,sizeof(ans));
+        sort(s.begin(),s.end());
+        n--;
+        int l=s.size();
+        for(int i=0;i<l;i++){
+            ll index=(n/factorial[l-i-1]);
+            ans[i]=s[index];
+            s.erase(s.begin()+index);
+            n=n%factorial[l-i-1];
+        }
+        cout<<ans<<endl;
+    }
+    return 0;
+}

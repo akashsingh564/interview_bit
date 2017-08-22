@@ -1,0 +1,35 @@
+int max_histo(vector <int> v){
+    int n=v.size();
+    stack <int> s;
+    int area=0, max_area=-1, i=0;
+    while(i<n){
+        if(s.empty() || v[s.top()]<=v[i])
+            s.push(i++);
+        else{
+            int top=s.top();
+            s.pop();
+            area=v[top]*(s.empty()?i:i-s.top()-1);
+            max_area=max(max_area,area);
+        }
+    }
+    while(!s.empty()){
+        int top=s.top();
+        s.pop();
+        area=v[top]*(s.empty()?i:i-s.top()-1);
+        max_area=max(max_area,area);
+    }
+    return max_area;
+}
+
+int Solution::maximalRectangle(vector<vector<int> > &A) {
+    int n=A.size();
+    int m=A[0].size();
+    int ans=max_histo(A[0]);
+    for(int i=1;i<n;i++){
+        for(int j=0;j<m;j++)
+            if(A[i][j])
+                A[i][j]=A[i-1][j]+A[i][j];
+        ans=max(ans,max_histo(A[i]));
+    }
+    return ans;
+}

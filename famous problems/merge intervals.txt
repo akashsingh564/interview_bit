@@ -1,0 +1,74 @@
+vector<Interval> Solution::insert(vector<Interval> &intervals, Interval newInterval) {
+    int idx=0;
+    vector <Interval> s;
+    for(idx=0;idx<intervals.size();idx++){
+        if(intervals[idx].start>=newInterval.start)
+            break;
+    }
+    for(int i=0;i<idx;i++)
+        s.push_back(intervals[i]);
+    if(idx==0)
+        s.insert(s.begin(),newInterval);
+    int it=s.end()-s.begin();
+    Interval top=s[it-1];
+    if(top.end<newInterval.start){
+        s.push_back(newInterval);
+        it++;
+    }
+    else{
+        top.end=max(top.end,newInterval.end);
+        s[it-1]=top;
+    }
+    for(int i=idx;i<intervals.size();i++){
+        Interval top=s[it-1];
+        if(top.end<intervals[i].start){
+            s.push_back(intervals[i]);
+            it++;
+        }
+        else{
+            top.end=max(top.end,intervals[i].end);
+            s[it-1]=top;
+        }
+    }
+    return s;
+}
+
+/*
+vector<Interval> Solution::insert(vector<Interval> &intervals, Interval newInterval) {
+    vector <Interval> res;
+    Interval top;
+    int idx=0;
+    while(idx<intervals.size() && intervals[idx].start<newInterval.start){
+        res.push_back(intervals[idx]);
+        idx++;
+    }
+    if(idx==0)
+        res.push_back(newInterval);
+    else{
+        if(newInterval.start>res[idx-1].end){
+            res.push_back(newInterval);
+        }
+        else{
+            top=res[idx-1];
+            res.pop_back();
+            top.end=max(top.end,newInterval.end);
+            res.push_back(top);
+        }
+    }
+    int i=idx;
+    idx=res.size()-1;
+    for(;i<intervals.size();i++){
+        top=res[idx];
+        if(top.end<intervals[i].start){
+            res.push_back(intervals[i]);
+            idx++;
+        }
+        else{
+            res.pop_back();
+            top.end=max(top.end,intervals[i].end);
+            res.push_back(top);
+        }
+    }
+    return res;
+}
+*/

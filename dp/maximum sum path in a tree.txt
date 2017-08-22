@@ -1,0 +1,17 @@
+int max_sum;
+
+int max_sum_path(TreeNode* root){
+    if(root==NULL)
+        return 0;
+    int l=max_sum_path(root->left); //sum in left sub-tree
+    int r=max_sum_path(root->right); //sum in right sub-tree
+    int one_way=max((root->val+max(l,r)),root->val); //max of path on one side of the root
+    max_sum=max(max_sum,max(one_way,(l+r+root->val))); //max path on both sides of root
+    return one_way;
+}
+
+int Solution::maxPathSum(TreeNode* A) {
+    max_sum=INT_MIN;
+    max_sum_path(A);
+    return max_sum;
+}

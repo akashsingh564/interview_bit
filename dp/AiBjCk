@@ -1,0 +1,22 @@
+//http://www.geeksforgeeks.org/number-subsequences-form-ai-bj-ck/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int dp[3];
+string s;
+
+int main(){
+    memset(dp,0,sizeof(dp));
+    cin>>s;
+    for(int i=0;s[i];i++){
+        if(s[i]=='a')
+            dp[0]=(2*dp[0])+1;
+        if(s[i]=='b')
+            dp[1]=(2*dp[1])+dp[0];
+        if(s[i]=='c')
+            dp[2]=(2*dp[2])+dp[1];
+    }
+    cout<<dp[2]<<endl;
+    return 0;
+}

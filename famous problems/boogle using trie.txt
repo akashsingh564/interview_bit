@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define CHAR_LIMIT 26
+#define N 5
+#define M 5
+
+int x[]={0,-1,-1,-1,0,1,1,1};
+int y[]={1,1,0,-1,-1,-1,0,1};
+
+int visit[1005][1005];
+
+struct node{
+    bool is_word;
+    node* a[CHAR_LIMIT];
+    node(){
+        is_word=false;
+        for(int i=0;i<CHAR_LIMIT;i++)
+            a[i]=NULL;
+    }
+};
+
+void insert(node* root, string word){
+    for(int level=0;level<word.size();level++){
+        int key=word[level]-'A';
+        if(!root->a[key])
+            root->a[key]=new node();
+        root=root->a[key];
+    }
+    root->is_word=true;
+}
+
+bool find(node* root, string word){
+    for(int level=0;level<word.size();level++){
+        if(!root->a[word[level]-'A'])
+            return false;
+        root=root->a[word[level]-'A'];
+    }
+    return root->is_word;
+}
+
+bool is_safe(int x, int y){
+    return (x>=0 && x<N && y>=0 && y<M && !visit[x][y]);
+}
+
+void find_word(node* root, int row, int col, string str, char boogle[N][M]){
+    if(root->is_word)
+        cout<<str<<endl;
+    
+    visit[row][col]=1;
+    for(int i=0;i<8;i++){
+        int u=row+x[i];
+        int v=col+y[i];
+        if(is_safe(u,v) && root->a[boogle[u][v]-'A']){
+            find_word(root->a[boogle[u][v]-'A'],u,v,str+boogle[u][v],boogle);
+        }
+    }
+    visit[row][col]=0;
+}
+
+void find_words(char boogle[N][M], node* root){
+    memset(visit,0,sizeof(visit));
+    string str="";
+    for(int i=0;i<N;i++){
+        for(int j=0;j<M;j++){
+            if(root->a[boogle[i][j]-'A']){
+                str+=boogle[i][j];
+                find_word(root->a[boogle[i][j]-'A'],i,j,str,boogle);
+                str="";
+            }
+        }
+    }
+}
+
+int main(){
+    string dict[]={"AKASH", "SINGH", "BITS", "PILANI", "ORACLE"};
+    char boggle[N][M] = {{'X','A','I','X','X'},
+                         {'A','N','K','X','X'},
+                         {'L','P','B','A','X'},
+                         {'X','I','S','X','X'},
+                         {'X','H','T','S','X'}};
+    
+    int n = sizeof(dict)/sizeof(dict[0]);
+    node *root=new node();
+    
+    for(int i=0;i<n;i++)
+        insert(root,dict[i]);
+        
+    find_words(boggle,root);
+    
+    /*string dict[]={"AKASH", "SINGH", "BITS", "PILANI", "ORACLE"};
+    int n = sizeof(dict)/sizeof(dict[0]);
+    node *root=new node();
+    for(int i=0;i<n;i++)
+        insert(root,dict[i]);
+    cout<<find(root,"SINGH")<<endl;
+    cout<<find(root,"BITS")<<endl;
+    cout<<find(root,"ORACLE")<<endl;
+    cout<<find(root,"KUMAR")<<endl;*/
+
+    return 0;
+}
